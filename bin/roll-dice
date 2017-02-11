@@ -1,0 +1,104 @@
+#!/usr/bin/env php
+<?php
+use HylianShield\NumberGenerator\NumberGenerator;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Helper\TableCell;
+use Symfony\Component\Console\Helper\TableSeparator;
+use Symfony\Component\Console\Helper\TableStyle;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use ZeroConfig\D\DieFactory;
+use ZeroConfig\D\Interpreter;
+use ZeroConfig\D\RollFactory;
+use ZeroConfig\D\RollInterface;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$interpreter = new Interpreter(
+    new DieFactory(
+        new RollFactory(),
+        new NumberGenerator()
+    )
+);
+
+$list   = array_slice($argv, 1);
+$output = new ConsoleOutput();
+
+if (count($list) === 0) {
+    $output->writeln('<fg=red>Cannot roll without dice.</>');
+    exit;
+}
+
+try {
+    $diceList = $interpreter->interpretList(...$list);
+} catch (Throwable $e) {
+    $output->writeln(
+        sprintf(
+            'Could not interpret the given list of dice: <comment>%s</comment>',
+            implode(', ', $list)
+        )
+    );
+
+    $output->writeln(
+        sprintf('<fg=red>%s</>', $e->getMessage())
+    );
+
+    exit;
+}
+
+$maximum = 0;
+$total   = 0;
+$table   = new Table($output);
+$right   = new TableStyle();
+
+$right->setPadType(STR_PAD_LEFT);
+
+$table->setHeaders(['Dice', 'Rolls', 'Roll total', 'Maximum']);
+$table->setColumnStyle(2, $right);
+$table->setColumnStyle(3, $right);
+
+foreach ($diceList as $numEyes => $dice) {
+    $rolls = array_map(
+        function (RollInterface $roll) : int {
+            return $roll->getValue();
+        },
+        iterator_to_array($dice->roll())
+    );
+
+    $diceMaximum      = $numEyes * count($rolls);
+    $subTotal         = array_sum($rolls);
+    $total           += $subTotal;
+    $maximum         += $diceMaximum;
+
+    $table->addRow([
+        sprintf('%dx d%s', count($rolls), $numEyes),
+        implode(', ', $rolls),
+        $subTotal,
+        $diceMaximum
+    ]);
+}
+
+$table->addRows([
+    new TableSeparator(),
+    [
+        new TableCell(
+            'Total',
+            ['colspan' => 2]
+        ),
+        $total,
+        $maximum
+    ]
+]);
+
+$table->render();
+
+if ($total === $maximum) {
+    $output->write('<fg=green;options=bold>CRIT!</> ');
+}
+
+$output->writeln(
+    sprintf(
+        'Rolled a <comment>%d</comment> out of <comment>%d</comment>',
+        $total,
+        $maximum
+    )
+);

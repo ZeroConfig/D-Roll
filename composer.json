@@ -1,0 +1,26 @@
+{
+  "name": "zero-config/d-roll",
+  "description": "Dice rolling application",
+  "type": "project",
+  "keywords": ["d", "dice", "die", "game", "rolling", "gamble", "gambling", "d6", "d20"],
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Jan-Marten de Boer",
+      "email": "github@johmanx.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "bin": [
+    "bin/roll-dice"
+  ],
+  "require": {
+    "php": "^7.0",
+    "zero-config/d": "^1.0",
+    "symfony/console": "^3.2.3"
+  },
+  "require-dev": {
+    "raveren/kint": "^1.0.10"
+  }
+}
