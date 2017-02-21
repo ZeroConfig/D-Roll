@@ -22,8 +22,8 @@ human readable dice notations:
 
 ![Interpreted](docs/interpreted.png)
 
-You will notice that one of the inputs is `3d6` and the last input is `6`. Under
-the hood this gets added up to `4d6`.
+You will notice that one of the inputs is `3d6+10` and the last input is `6`. Under
+the hood this gets added up to `4d6+10`.
 
 The notation is also very loose. That is why `2 D12` is interpreted as `2d12`.
 

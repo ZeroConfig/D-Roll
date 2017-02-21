@@ -45,16 +45,27 @@ try {
     exit;
 }
 
-$maximum = 0;
-$total   = 0;
-$table   = new Table($output);
-$right   = new TableStyle();
+$maximum       = 0;
+$total         = 0;
+$totalModifier = 0;
+$table         = new Table($output);
+$right         = new TableStyle();
 
 $right->setPadType(STR_PAD_LEFT);
 
-$table->setHeaders(['Dice', 'Rolls', 'Roll total', 'Maximum']);
+$table->setHeaders([
+    'Dice',
+    'Rolls',
+    new TableCell(
+        'Roll total',
+        ['colspan' => 2]
+    ),
+    'Maximum'
+]);
+$table->setColumnStyle(1, $right);
 $table->setColumnStyle(2, $right);
 $table->setColumnStyle(3, $right);
+$table->setColumnStyle(4, $right);
 
 foreach ($diceList as $numEyes => $dice) {
     $rolls = array_map(
@@ -64,15 +75,17 @@ foreach ($diceList as $numEyes => $dice) {
         iterator_to_array($dice->roll())
     );
 
-    $diceMaximum      = $numEyes * count($rolls);
-    $subTotal         = array_sum($rolls);
-    $total           += $subTotal;
-    $maximum         += $diceMaximum;
+    $diceMaximum    = $numEyes * count($rolls) + $dice->getModifier();
+    $subTotal       = array_sum($rolls);
+    $total         += $subTotal;
+    $totalModifier += $dice->getModifier();
+    $maximum       += $diceMaximum;
 
     $table->addRow([
-        sprintf('%dx d%s', count($rolls), $numEyes),
+        sprintf('%dx d%s +%d', count($rolls), $numEyes, $dice->getModifier()),
         implode(', ', $rolls),
         $subTotal,
+        sprintf('+%d', $dice->getModifier()),
         $diceMaximum
     ]);
 }
@@ -80,11 +93,14 @@ foreach ($diceList as $numEyes => $dice) {
 $table->addRows([
     new TableSeparator(),
     [
+        '<info>Total</info>',
         new TableCell(
-            'Total',
-            ['colspan' => 2]
+            sprintf(
+                '<fg=white;options=bold,underscore>%d</>',
+                $total + $totalModifier
+            ),
+            ['colspan' => 3]
         ),
-        $total,
         $maximum
     ]
 ]);
@@ -98,7 +114,7 @@ if ($total === $maximum) {
 $output->writeln(
     sprintf(
         'Rolled a <comment>%d</comment> out of <comment>%d</comment>',
-        $total,
+        $total + $totalModifier,
         $maximum
     )
 );
