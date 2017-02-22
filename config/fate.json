@@ -1,0 +1,54 @@
+{
+  "<": {
+    "label": "Absolutely dreadful",
+    "color": "red"
+  },
+  "-2": {
+    "label": "Terrible",
+    "color": "red"
+  },
+  "-1": {
+    "label": "Poor",
+    "color": "red"
+  },
+  "0": {
+    "label": "Mediocre",
+    "color": "yellow"
+  },
+  "1": {
+    "label": "Average",
+    "color": "yellow"
+  },
+  "2": {
+    "label": "Fair",
+    "color": "yellow"
+  },
+  "3": {
+    "label": "Good",
+    "color": "green"
+  },
+  "4": {
+    "label": "Great",
+    "color": "green"
+  },
+  "5": {
+    "label": "Superb",
+    "color": "green"
+  },
+  "6": {
+    "label": "Fantastic",
+    "color": "green"
+  },
+  "7": {
+    "label": "Epic",
+    "color": "cyan"
+  },
+  "8": {
+    "label": "Legendary",
+    "color": "cyan"
+  },
+  ">": {
+    "label": "Ridiculously awesome!",
+    "color": "cyan"
+  }
+}

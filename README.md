@@ -9,7 +9,7 @@ It implements [zero-config/d](https://github.com/ZeroConfig/D).
 composer create-project --no-dev zero-config/d-roll
 ```
 
-# Usage
+# Rolling dice
 
 The standalone application allows you to roll dice on-the-fly. It also tells you
 when you roll a *CRIT*.
@@ -30,15 +30,45 @@ The notation is also very loose. That is why `2 D12` is interpreted as `2d12`.
 You will also notice that the interpreter sorts the dice by number of eyes. This
 adds to the readability of the output.
 
-When failing to supply a correct list of dice, the application will exit:
+# Tempting fate
 
-![Failed interpretation](docs/failed-interpretation.png)
+Another part of the application will help you tempt fate.
+It is based on the [Fate RPG](https://fate-srd.com/fate-core/taking-action-dice-ladder).
 
-It interpreted `Foo` as `0 eyes` which is not a valid number of eyes on a die.
-Everything below `2` is considered invalid, since the number must be positive,
-over `0` and setting it to `1` would mean a `100%` chance, which is not a valid
-reason to roll dice.
+![Poor](docs/poor.png)
 
-Failing to supply a list of dice, the application exits differently:
+![Average](docs/average.png)
 
-![Missing dice](docs/missing-dice.png)
+![Good](docs/good.png)
+
+One can supply a custom translation for fate values, to expand the list of
+possibilities, by supplying a file with the `--config` option.
+
+![Everything is awesome!](docs/everything-is-awesome.png)
+
+![Ridiculously awesome!](docs/ridiculously-awesome.png)
+
+A custom configuration looks like the following:
+
+```json
+{
+  "<": {
+    "label": "Everything is awesome!",
+    "color": "cyan"
+  },
+  "-1": {
+    "label": "Just about awesome!",
+    "color": "yellow"
+  },
+  "0": {
+    "label": "Awesome!",
+    "color": "green"
+  },
+  ">": {
+    "label": "Ridiculously awesome!",
+    "color": "cyan"
+  }
+}
+```
+
+Available colors are `black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan` and `white`.

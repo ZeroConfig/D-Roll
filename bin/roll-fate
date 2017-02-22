@@ -2,5 +2,5 @@
 <?php
 /** @var \Symfony\Component\Console\Application $application */
 $application = require __DIR__ . '/application.php';
-$application->setDefaultCommand('dice', true);
+$application->setDefaultCommand('fate', true);
 $application->run();

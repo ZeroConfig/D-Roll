@@ -13,7 +13,8 @@
   "minimum-stability": "stable",
   "prefer-stable": true,
   "bin": [
-    "bin/roll-dice"
+    "bin/roll-dice",
+    "bin/roll-fate"
   ],
   "require": {
     "php": "^7.0",
@@ -22,5 +23,10 @@
   },
   "require-dev": {
     "raveren/kint": "^1.0.10"
+  },
+  "autoload": {
+    "psr-4": {
+      "ZeroConfig\\D\\": "src"
+    }
   }
 }
