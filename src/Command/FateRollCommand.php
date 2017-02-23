@@ -20,9 +20,10 @@ class FateRollCommand extends AbstractInterpreterCommand
         $this->setName('fate');
         $this->setDescription('Tempt fate and reveal your path.');
         $this->addArgument(
-            'numDice',
-            InputArgument::REQUIRED,
-            'The number of dice to roll. Needs to be <comment>2 or higher</comment>.'
+            'skillBonus',
+            InputArgument::OPTIONAL,
+            'The skill bonus to add to the fate roll. Must be 0 or higher.',
+            '0'
         );
         $this->addOption(
             'config',
@@ -43,17 +44,17 @@ class FateRollCommand extends AbstractInterpreterCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $numDice = (int)$input->getArgument('numDice');
+        $skill = (int)$input->getArgument('skillBonus');
 
-        if ($numDice < 2) {
+        if ($skill < 0) {
             throw new RangeException(
-                'The number of dice needs to be at least 2.'
+                'The skill bonus cannot be a negative number.'
             );
         }
 
         $dice = $this
             ->getInterpreter()
-            ->interpretDice(sprintf('%dd3', $numDice));
+            ->interpretDice(sprintf('4d3+%d', $skill));
 
         $rolls = array_map(
             function (RollInterface $roll) : int {
@@ -69,10 +70,10 @@ class FateRollCommand extends AbstractInterpreterCommand
         foreach ($rolls as $roll) {
             $output->write($this->translateRollValue($roll));
         }
-        $output->writeln('');
+        $output->writeln(sprintf(' +%d', $dice->getModifier()));
 
         $output->writeln(
-            $this->translateFate($input, $fate)
+            $this->translateFate($input, $fate + $dice->getModifier())
         );
     }
 

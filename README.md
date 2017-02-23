@@ -35,18 +35,10 @@ adds to the readability of the output.
 Another part of the application will help you tempt fate.
 It is based on the [Fate RPG](https://fate-srd.com/fate-core/taking-action-dice-ladder).
 
-![Poor](docs/poor.png)
-
-![Average](docs/average.png)
-
-![Good](docs/good.png)
+![Epic](docs/epic.png)
 
 One can supply a custom translation for fate values, to expand the list of
 possibilities, by supplying a file with the `--config` option.
-
-![Everything is awesome!](docs/everything-is-awesome.png)
-
-![Ridiculously awesome!](docs/ridiculously-awesome.png)
 
 A custom configuration looks like the following:
 
